@@ -1,57 +1,47 @@
-# PM Documentation Framework — Agent Instructions
+# PM Documentation Framework
 
-## File Layout
+## Repo structure
 
 ```
-specs/
-  _templates/          # Copy a template to start a new doc
-  _rules/              # Machine-checkable review rules per doc type
-  _reference/          # EARS notation, doc taxonomy, cross-doc relationships, etc.
-  constitution.md      # Non-negotiable engineering principles (always read)
-  glossary.md          # Shared vocabulary
-  requirements.md      # (created per project) What + why
-  architecture.md      # (created per project) How
-  test-strategy.md     # (created per project) How we verify
-  interfaces/          # One file per component boundary
-decisions/
-  rfcs/                # Pre-decision exploration
-  adrs/                # Immutable decision records (MADR 4.0)
+specs/_templates/     # Copy a template to create a new doc
+specs/_rules/         # Review rules per doc type (check after authoring)
+specs/_reference/     # EARS notation, doc taxonomy, cross-doc relationships
+specs/constitution.md # Non-negotiable engineering principles (read first, always)
+specs/glossary.md     # Shared vocabulary
+specs/interfaces/     # One file per component boundary
+decisions/adrs/       # Immutable decision records (MADR 4.0)
+decisions/rfcs/       # Pre-decision exploration
 ```
 
-## Core Rules — Read Before Coding
+## Before writing code
 
-Before writing any implementation code, read these files in order:
+Read these files in order — skip any that don't exist yet:
 
-1. `specs/constitution.md` — non-negotiable rules that override everything
-2. `specs/requirements.md` — what to build (EARS requirements with FR/NFR IDs)
-3. `decisions/adrs/` — scan for relevant accepted ADRs before making tech choices
-4. `specs/architecture.md` — system structure, patterns, component responsibilities
-5. `specs/interfaces/` — check for contracts at any boundary you're touching
+1. `specs/constitution.md` — overrides everything
+2. `specs/requirements.md` — EARS requirements with FR/NFR IDs
+3. `decisions/adrs/` — accepted ADRs constrain tech choices
+4. `specs/architecture.md` — system structure, patterns, components
+5. `specs/interfaces/` — contracts at boundaries you're touching
 
-If a file doesn't exist yet, note the gap but don't block on it.
+## Creating a new document
 
-## Requirements Change Governance (REQ-R07)
+1. Copy the template from `specs/_templates/{doc-type}-template.md`
+2. Fill in YAML frontmatter (status, date, owner, version)
+3. Follow the template structure — don't skip sections, mark empty ones TBD with owner
+4. Assign unique IDs: FR-NNN, NFR-NNN, ADR-NNN, RFC-NNN, CONST-{CAT}-NN
+5. IDs are sequential and never reused
 
-**No behavioral requirement change without an ADR.**
+## Reviewing a document
 
-Any modification to requirements.md that alters system behavior, scope, or quantitative
-targets SHALL be accompanied by an ADR documenting the change rationale.
+Check against `specs/_rules/{doc-type}-rules.md`. Error-severity rules must be fixed before the document is usable. Warning-severity rules should be fixed.
 
-**Requires an ADR:**
-- Adding, removing, or changing a FR or NFR
-- Changing an NFR's quantitative target
-- Moving a requirement between in-scope and out-of-scope
+Cross-document consistency rules are in `specs/_rules/cross-doc-rules.md` — check these when a document references other documents.
 
-**Does NOT require an ADR:**
-- Clarifying wording without changing behavior
-- Fixing EARS notation
-- Adding a failure mode, assumption, or open question
-- Typos and readability improvements
+## Requirements change governance (REQ-R07)
 
-**The test:** If the change would cause an agent to generate different code, it needs an
-ADR. If it only makes existing intent clearer, it doesn't.
+**No behavioral requirement change without an ADR.** If a change to requirements.md would cause an agent to generate different code, it needs an ADR first. Clarifications, typo fixes, and added failure modes do not.
 
-## EARS Quick Reference
+## EARS quick reference
 
 | Pattern | Keyword | Template |
 |---------|---------|----------|
@@ -62,73 +52,11 @@ ADR. If it only makes existing intent clearer, it doesn't.
 | Unwanted | **If/then** | If \<condition\>, then the \<system\> shall \<response\>. |
 | Complex | Combined | While \<pre\>, when \<trigger\>, the \<system\> shall \<response\>. |
 
-## Review Rules Summary
+Full notation guide with examples: `specs/_reference/ears-notation.md`
 
-Review rules are in `specs/_rules/`. Key severities:
+## Key references
 
-**Error (must fix):**
-- UNIV-01: YAML frontmatter with status (valid enum), date, owner, version
-- REQ-R02: Every requirement has a unique, stable ID (never reused)
-- REQ-R03: Requirements don't prescribe implementation
-- REQ-R07: Behavioral requirement changes accompanied by ADR with affected IDs
-- ADR-R01: ADR status from valid enum
-- ARCH-R01: External interfaces specify protocol and data format
-- CONST-R01: Constitution principles have unique CONST-{CATEGORY}-NN IDs
-- CONST-R06: Constitution amendments recorded in Amendment Log with ADR
-- RFC-R05: Accepted RFC produces at least one ADR
-- XDOC-01: Referenced ADRs exist in decisions/adrs/
-- XDOC-02: Referenced requirement IDs exist in requirements.md
-- XDOC-04: Superseded ADRs have a successor that exists (no circular chains)
-- XDOC-07: ADRs conflicting with constitution include amendment
-
-**Warning (should fix):**
-- UNIV-04: Vague adjectives quantified
-- REQ-R05: User journeys have failure modes
-- ADR-R05: Consequences include tradeoffs
-- ARCH-R04: Runtime view includes failure scenarios
-- XDOC-09: Every FR/NFR referenced by at least one arch component, test, or ADR
-
-## ID Conventions
-
-| Doc Type | ID Pattern | Example |
-|----------|-----------|---------|
-| Functional Requirement | FR-NNN | FR-001 |
-| Non-Functional Requirement | NFR-NNN | NFR-001 |
-| ADR | ADR-NNN | ADR-001 |
-| RFC | RFC-NNN | RFC-001 |
-| Universal Rule | UNIV-NN | UNIV-01 |
-| Cross-Doc Rule | XDOC-NN | XDOC-01 |
-| Requirements Rule | REQ-RNN | REQ-R01 |
-| ADR Rule | ADR-RNN | ADR-R01 |
-| Architecture Rule | ARCH-RNN | ARCH-R01 |
-| RFC Rule | RFC-RNN | RFC-R01 |
-| Constitution Rule | CONST-RNN | CONST-R01 |
-| Constitution Principle | CONST-{CAT}-NN | CONST-CS-01 |
-
-IDs are sequential and never reused. Superseded documents keep their IDs.
-
-## Workflow Cheat Sheets
-
-### Greenfield (new project/feature)
-
-1. Write Requirements Spec (problem statement + user journeys + EARS requirements)
-2. Write RFCs for foundational technical decisions (data layer, API style, auth, deploy, observability)
-3. Resolve each RFC -> produce corresponding ADR(s)
-4. Write Architecture Doc (synthesize ADRs into coherent design)
-5. Write Interface Contracts (one per component boundary)
-6. Decompose into tasks -> execute
-
-### Brownfield (adding features to existing system)
-
-1. Write change specification (delta against existing requirements)
-2. Maybe 0-1 RFCs if new technical territory
-3. ADRs for any new decisions
-4. Update Architecture Doc
-5. Decompose into tasks -> execute
-
-### Bug Fix
-
-1. Identify which FR-xxx is violated
-2. Read constitution, architecture, and relevant interface contracts
-3. Fix the code to match the spec
-4. If the spec was wrong, write an ADR first (REQ-R07), then update the requirement
+- Cross-doc relationships and traceability: `specs/_reference/cross-doc-relationships.md`
+- When to write an RFC vs ADR: `specs/_reference/greenfield-rfc-vs-adr.md`
+- Document taxonomy (all doc types): `specs/_reference/doc-taxonomy.md`
+- Agent optimization (what makes docs agent-consumable): `specs/_reference/agent-optimization.md`
