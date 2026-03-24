@@ -81,7 +81,43 @@ tagged by severity:
 
 IDs are sequential and never reused. Superseded documents keep their IDs.
 
-## Getting started
+## Using this in your project
+
+### Option A: Copy and init
+
+```bash
+git clone git@github.com:nichenke/pm-doc-framework.git /tmp/pm-doc-framework
+cp -r /tmp/pm-doc-framework/specs your-project/specs
+cp -r /tmp/pm-doc-framework/decisions your-project/decisions
+cp /tmp/pm-doc-framework/CLAUDE.md your-project/CLAUDE.md
+rm -rf /tmp/pm-doc-framework
+cd your-project && git add specs/ decisions/ CLAUDE.md
+git commit -m "chore: add PM doc framework"
+```
+
+### Option B: Git submodule
+
+```bash
+cd your-project
+git submodule add git@github.com:nichenke/pm-doc-framework.git .pm-doc-framework
+```
+
+### Option C: Claude Code bootstrap
+
+Tell Claude Code: "Read the PM doc framework at `specs/` and help me bootstrap my project."
+
+### After setup
+
+**Phase 1 (do this first):**
+1. Write `specs/constitution.md` — 10-20 non-negotiable engineering rules
+2. Capture requirements for your current workstream using EARS notation
+3. Write retroactive ADRs for decisions already made (database, auth, deploy model)
+
+**Phase 2:** Draft architecture doc sections 1, 3, 4, 5 (don't fill all 12 at once)
+
+**Phase 3:** Start using the framework for new work — add requirements and ADRs as they arise
+
+## Adoption order
 
 1. **Start with Requirements + ADRs** — highest leverage. Requirements tell agents what to build; ADRs prevent them from relitigating decisions.
 2. **Add Architecture Doc** once you have enough ADRs to reference.
