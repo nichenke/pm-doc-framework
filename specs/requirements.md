@@ -118,6 +118,7 @@ tested, and synced across the repo and any Notion upstream.
 - FR-014: When creating an RFC, the plugin shall guide the user through: executive summary, problem statement with measurable evidence, scope, proposed solution, at least one alternative, migration/rollout plan with rollback, risks, and success criteria.
 - FR-015: When the plugin creates a new document, the plugin shall populate YAML frontmatter with status, date, owner, and version.
 - FR-016: When the plugin creates a new document, the plugin shall assign the next sequential ID for that doc type.
+- FR-023: When creating an ADR, after the document is written, the plugin shall identify downstream docs (requirements, architecture, constitution, interfaces) that need updates to reflect the decision, propose specific changes, and apply approved changes. The plugin shall flag any ADR consequences that cannot be traced to a downstream doc.
 
 ### Review
 
@@ -129,7 +130,7 @@ tested, and synced across the repo and any Notion upstream.
 ### Rules auto-loading
 
 - FR-021: The plugin shall auto-load framework rules into agent context via `.claude/rules/` without requiring CLAUDE.md edits in the target project.
-- FR-022: The auto-loaded rules shall include: the read-before-coding sequence, requirements change governance (REQ-R07), and EARS quick reference.
+- FR-022: The auto-loaded rules shall include: the read-before-coding sequence (constitution, requirements, architecture, interfaces — ADRs excluded, referenced only when modifying requirements or architecture), requirements change governance (REQ-R07), and EARS quick reference.
 
 ## 5. Non-Functional Requirements
 
