@@ -1,10 +1,10 @@
 ---
 status: Ratified
-version: 1.0.0
+version: 1.1.0
 date: 2026-03-25
 ratified_by: [nic]
-last_amended:
-amendment_adrs: []
+last_amended: 2026-03-28
+amendment_adrs: [ADR-003]
 ---
 
 # Engineering Constitution
@@ -27,6 +27,7 @@ an ADR with explicit ratification.
 ## Quality
 - [CONST-QA-01] Skills must be measurably better than manual workflow before shipping — use /skill-creator evals to validate
 - [CONST-QA-02] Evals must cover rule following, activation ordering, and skill triggering accuracy
+- [CONST-QA-03] Plugin releases must pass automated content integrity tests, plugin structure validation, and functional end-to-end testing — no manual-only quality gates
 
 ## Process
 - [CONST-PROC-01] Any plugin change that alters behavior bumps the version (semver)
@@ -37,3 +38,4 @@ an ADR with explicit ratification.
 | Version | Date | ADR | Change Summary |
 |---------|------|-----|----------------|
 | 1.0.0 | 2026-03-25 | ADR-001 | Initial ratification |
+| 1.1.0 | 2026-03-28 | ADR-003 | Add CONST-QA-03 — automated quality gates for plugin releases |

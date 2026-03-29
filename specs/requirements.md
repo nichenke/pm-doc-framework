@@ -138,6 +138,10 @@ tested, and synced across the repo and any Notion upstream.
 - NFR-002: The `/preflight scaffold` skill shall complete in under 5 seconds for a new project.
 - NFR-003: The auto-loaded rules file shall not exceed 80 lines — context budget must be managed.
 - NFR-004: Each skill shall be validated with /skill-creator evals before shipping, with passing scores for rule following, activation ordering, and triggering accuracy.
+- NFR-005: The plugin shall include automated content integrity tests (bash) that verify all expected files exist, have valid frontmatter, and contain required structural elements. Tests shall run without Claude Code or external dependencies.
+- NFR-006: The plugin structure shall pass plugin-dev validation (manifest, skill frontmatter, file references) before each release.
+- NFR-007: Each release shall pass functional end-to-end tests covering: fresh scaffold, scaffold with custom docs dir, scaffold update without clobbering (FR-008/FR-009), `/preflight new` for at least ADR and requirements types, `/preflight review` on valid and invalid documents, and ADR impact propagation (FR-023).
+- NFR-008: All skill files shall pass code review (/simplify or equivalent) before shipping — checking for consistency across skills, edge case coverage, and frontmatter triggering quality.
 
 ## 6. Constraints
 
@@ -162,6 +166,8 @@ tested, and synced across the repo and any Notion upstream.
 | Context cost of rules | 135 lines (current CLAUDE.md) | <80 lines (auto-loaded rules file) | Line count of `.claude/rules/preflight.md` |
 | Skill activation accuracy | N/A (no skills today) | >90% correct triggering | /skill-creator eval suite |
 | Rule-following accuracy | N/A | >85% of rules followed without reminder | /skill-creator eval on generated docs |
+| Content integrity tests | N/A | 0 failures | `tests/test-content-integrity.sh` exit code |
+| Functional test coverage | N/A | All 6 scenarios pass (NFR-007) | Manual test run before release |
 
 ## 9. Out of Scope
 

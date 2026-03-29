@@ -356,11 +356,16 @@ Review is advisory — it does not modify the document or block anything.
 | NFR-002               | Scaffold uses Write tool for file creation                     |
 | NFR-003               | Rules file template is \~30 lines                              |
 | NFR-004               | Each skill validated with /skill-creator evals before shipping |
+| NFR-005               | `tests/test-content-integrity.sh` — bash tests, no deps       |
+| NFR-006               | Plugin-dev validation before release                           |
+| NFR-007               | Functional E2E tests: scaffold, new, review, update, propagation |
+| NFR-008               | Code review (/simplify) on skill files before shipping         |
 | CONST-CI-01           | `.preflight/` committed to git — standalone without plugin     |
 | CONST-CI-02           | `content/` is single source of truth for templates             |
 | CONST-DIST-01         | Rules auto-load via scaffold-generated `.claude/rules/`        |
 | CONST-DIST-02         | FR-009 protected files list                                    |
 | CONST-QA-01, QA-02    | NFR-004 eval requirement                                       |
+| CONST-QA-03           | NFR-005 through NFR-008 quality gate suite                     |
 | CONST-PROC-01         | Semver in plugin.json                                          |
 | CONST-PROC-02         | Inherited from requirements governance                         |
 | CONST-PROC-03         | ADR template uses MADR 4.0                                     |
